@@ -5,16 +5,16 @@ var async = require('async')
 var url1 = process.argv[2];
 var url2 = process.argv[3];
 var url3 = process.argv[4];
-var allData = [];
 
-http.get(url1, callback1);
+http.get(url1, callback);
 
+function callback(data){
 
-function callback1(response){
+  var allData = "";
 
   response.pipe(bl(function (err, data) {
     data.toString();
-    allData.push(data);
+    allData += data;
   }))
 
   response.on('end', function(){
@@ -31,3 +31,9 @@ function PrintOut(){
         console.log(allData[i]);
   }
 }
+
+async.series({
+  one: function(callback){
+    http.get(url1, callback);
+  }
+});
